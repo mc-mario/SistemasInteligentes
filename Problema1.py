@@ -65,6 +65,8 @@ def solve_profundidad(lab=make_ejemplo(), limit=100):
                 expandir_frontera_p1(frontera,lab, nodo_actual, 1)
                 x = frontera_iter(frontera, limite_max, iter+1)
                 if x is not None: return x
+                nodo_actual.hijos = []
+
                 expandir_frontera_p1(frontera,lab, nodo_actual, 2)
                 x = frontera_iter(frontera, limite_max, iter+1)
                 if x is not None: return x
@@ -73,6 +75,8 @@ def solve_profundidad(lab=make_ejemplo(), limit=100):
                 expandir_frontera_p1(frontera,lab, nodo_actual, 1)
                 x = frontera_iter(frontera, limite_max, iter+1)
                 if x is not None: return x
+                nodo_actual.hijos = []
+
                 expandir_frontera_p1(frontera,lab, nodo_actual, 4)
                 x = frontera_iter(frontera, limite_max, iter+1)
                 if x is not None: return x
