@@ -1,24 +1,25 @@
 from uuid import uuid4
 class Nodo:
-    def __init__(self, n, level, es_blanco, padre=None):
-        self.n = n
-        self.level = level
-        self.color = 'Blanco' if es_blanco else 'Negro'
+    def __init__(self, i, dato, padre=None):
+        self.i = i
+        self.dato = dato
         self.padre = padre
 
     def __repr__(self):
-        return f'<{self.color, self.n}>'
+        return f'<{self.dato, self.i}>'
 
 class NodoH(Nodo):
 
-    def __init__(self, n, es_blanco, level=0, padre=None, hijos=[]):
-        super().__init__(n, es_blanco, level , padre)
+    def __init__(self, i, dato, padre=None, hijos=[]):
+        super().__init__(i, dato, padre)
         self.hijos = hijos
         self.uuid = uuid4()
 
     def set_hijos(self, hijos):
-        self.hijos = hijos
-        for hijo in self.hijos:
+        if len(self.hijos) > 0:
+            self.hijos.extend(hijos)
+        else: self.hijos = hijos
+        for hijo in hijos:
             hijo.padre = self
 
     def root(self):
@@ -27,6 +28,16 @@ class NodoH(Nodo):
             aux = aux.padre
         return aux
 
+class NodoP1(NodoH):
+    def __init__(self, i, dato, padre=None, hijos=[]):
+        super().__init__(i, dato, padre, hijos)
+        self.n = self.dato[0]
+        if self.dato[1] : self.color = 'Blanco' #True representa el color Blanco y vcv
+        else: self.color = 'Negro'
+
+    def __repr__(self):
+        return f'<{self.color}, {self.n}>'
+
 
 def rec(n : NodoH, limit = 3):
     n.hijos = [NodoH(index, True, n) for index in range(2)]
@@ -34,8 +45,3 @@ def rec(n : NodoH, limit = 3):
         if limit > 0:
             print(limit)
             rec(hijo, limit - 1)
-
-
-
-
-

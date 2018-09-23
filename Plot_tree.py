@@ -1,9 +1,10 @@
 from graphviz import Digraph
-from Grafos import NodoH, rec
+from Grafos import NodoH
 from Problema1 import *
-dot = Digraph(comment='plot_tree')
 
-def draw_tree(n):
+
+def draw_tree(comment, n):
+    dot = Digraph(comment=comment)
     if n is None:
         return False
     tree_root = n.root()
@@ -36,12 +37,11 @@ def draw_tree(n):
         pass
 
     create_nodes(dot, tree_root, resultado)
-    dot.render('test-output/round-table.gv', view=True)
+    dot.render(f'test-output/{comment}.gv', view=True)
 
 n1 = solve_anchura()
-n2 = solve_profundiad_limit(13)
+n2 = solve_profundidad(20)
 
 
-draw_tree(n2)
-
-
+draw_tree('Anchura', n1)
+draw_tree('Profundidad', n2)

@@ -1,182 +1,88 @@
 import random
-from Grafos import NodoH
-from utils import time_it
+from Grafos import NodoP1
 
+# Laberintos aleatorios
 def make(n):
     return [True if random.randint(0,10) > 7 else False for n in range(n)]
 
+# Laberinto propuesto en el entregable
 def make_ejemplo():
     return [True,False,True,True,True,False,True,True,False,True,False,True,True,False,False,True]
 
+# Este método lo tengo para poder abstraer un poco la lógica
+# de profundidad y anchura para adaptar a otros ejercicios estos algoritmos.
+# Añade el siguiente paso según el n -> (1, 2, 4), en caso de que falle
+# significa que nos saltabamos la casilla final, no es solución
+def expandir_frontera_p1(frontera, lab, padre, n):
+    try:
+        hijo = NodoP1(padre.i, [padre.n+n, lab[padre.n+n]], padre=padre)
+        padre.set_hijos([hijo])
+        frontera.append(hijo)
+    except IndexError as e:
+        pass
+
 def solve_anchura(lab = make_ejemplo()):
-    #print([f'Blanco {index+1}' if elem is True else f'Negro {index+1}' for index, elem in enumerate(lab)])
-    #copia_lab = lab[:]
 
-    nodo_inicial = NodoH(0, lab[0])
-
-    frontera = list()
-    frontera.append(nodo_inicial)
-
-    visitados = list()
+    #Inicializamos la frontera con la casilla de salida
+    frontera = [NodoP1(0, [0, lab[0]])]
 
     while len(frontera) > 0:
-        #nodo_actual = frontera.pop(-1) --> Profundidad
         nodo_actual = frontera.pop(0)
         n = nodo_actual.n
+        # N no corresponde a la profundidad (esto es i) si no a la casilla dentro del problema a resolver
 
-        hijos_actual = list() #Podriamos obtener los hijos con un mapa
-
-        #if n in [nodo.n for nodo in visitados]:
-        #    print('Ya visto')
-        #    continue
-        #else:
-        #    visitados.append(nodo_actual)
-
+        # Si N es igual al tamaño de lab, hemos llegado a una solución
         if n == len(lab) - 1:
-            #print(' ----- En memoria, momento previo a encontrar solucion: ', frontera)
             return nodo_actual
-        try:
 
-            if nodo_actual.color == 'Blanco':
-                hijos_actual.append(NodoH(n + 1, nodo_actual.level+1, lab[n + 1], nodo_actual))
-                hijos_actual.append(NodoH(n + 2, nodo_actual.level+1, lab[n + 2], nodo_actual))
+        if nodo_actual.color == 'Blanco':
+            expandir_frontera_p1(frontera, lab, nodo_actual, 1)
+            expandir_frontera_p1(frontera, lab, nodo_actual, 2)
 
-            else:
-                hijos_actual.append(NodoH(n + 1, nodo_actual.level+1, lab[n + 1], nodo_actual))
-                hijos_actual.append(NodoH(n + 4, nodo_actual.level+1, lab[n + 4], nodo_actual))
-
-        except Exception as e:
-            pass
-
-        finally:
-            nodo_actual.set_hijos(hijos_actual)
-            frontera.extend(hijos_actual)
-
-    return None
-
-def solve_profundidad(lab=make_ejemplo(), limit=None):
+        else:
+            expandir_frontera_p1(frontera, lab, nodo_actual, 1)
+            expandir_frontera_p1(frontera, lab, nodo_actual, 4)
+    return None #No hay solución
 
 
-    #print([f'Blanco {index+1}' if elem is True else f'Negro {index+1}' for index, elem in enumerate(lab)])
 
-
-    nodo_inicial = NodoH(0, 0, lab[0])
-
-    frontera = list()
-    frontera.append(nodo_inicial)
-    print(frontera, limit)
-    visitados = list()
-
-    while len(frontera) > 0:
-
-
-        nodo_actual = frontera[-1]
-        frontera = frontera[:-1]
-        n = nodo_actual.n
-
-        #print(f'--- {nodo_actual}', print(frontera), 'limite:', limit, 'level nodo actual:', n)
-
-        if limit is not None:
-            if limit < nodo_actual.level:
-                continue
-
-        hijos_actual = list() #Podriamos obtener los hijos con un mapa
-
-        #if n in [nodo.n for nodo in visitados]:
-        #    print('Ya visto')
-        #    continue
-        #else:
-        #    visitados.append(nodo_actual)
-        lena = nodo_actual.n
-        if lena == len(lab) - 1:
-            #print(' ----- En memoria, momento previo a encontrar solucion: ', frontera)
-            return nodo_actual
-        try:
-
-            if nodo_actual.color == 'Blanco':
-                hijos_actual.append(NodoH(n + 1, nodo_actual.level+1, lab[n + 1], padre=nodo_actual))
-                hijos_actual.append(NodoH(n + 2, nodo_actual.level+1, lab[n + 2], padre=nodo_actual))
-
-            else:
-                hijos_actual.append(NodoH(n + 1, nodo_actual.level+1, lab[n + 1], padre=nodo_actual))
-                hijos_actual.append(NodoH(n + 4, nodo_actual.level+1, lab[n + 4], padre=nodo_actual))
-
-        except Exception as e:
-            print(e)
-
-        finally:
-            nodo_actual.set_hijos(hijos_actual)
-            frontera.extend(hijos_actual)
-
-    return None
-
-
-def solve_profundiad_limit(r=100):
-    for num in range(r):
-        sol = solve_profundidad(make_ejemplo(), limit=num)
-        if sol is not None:
-            return sol
-
-def solve_laberinto_iter_dfs(n, ejemplo):
-        if not ejemplo: lab = make(n)
-        else: lab = make_ejemplo()
-        print([f'Blanco {index+1}' if elem is True else f'Negro {index+1}' for index, elem in enumerate(lab)])
-        #copia_lab = lab[:]
-
-        nodo_inicial = NodoH(0, lab[0])
-
-        frontera = list()
-        frontera.append(nodo_inicial)
-
-        visitados = list()
-
-        def depth_search(limited):
-            print('Accediendo nivel: ', limited)
-            if limited > 0:
-                nodo_actual = frontera.pop(-1)
-                if nodo_actual.n == len(lab) - 1:
-                    return nodo_actual
-                #if nodo_actual.n in [nodo.n for nodo in visitados]:
-                #    return None
-                try:
-                    if nodo_actual.color == 'Blanco':
-                        n = nodo_actual.n
-                        Nodo_a_1 = NodoH(n + 1, lab[n + 1], nodo_actual)
-                        frontera.append(Nodo_a_1)
-                        #Puede dar error
-                        Nodo_a_2 = NodoH(n + 2, lab[n + 2], nodo_actual)
-                        frontera.append(Nodo_a_2)
-                    else:
-                        n = nodo_actual.n
-                        Nodo_a_1 = NodoH(n + 1, lab[n + 1], nodo_actual)
-                        frontera.append(Nodo_a_1)
-                                                    #Puede dar error
-                        Nodo_a_4 = NodoH(n + 4, lab[n + 4], nodo_actual)
-                        frontera.append(Nodo_a_4)
-                    sol = depth_search(limited-1)
-                    if sol != None: return
-                except Exception as e:
-                    pass
+def solve_profundidad(lab=make_ejemplo(), limit=100):
+    # La declaración de listas, llamadas iterativas y devolver la solución se encuentran debajo
+    def frontera_iter(frontera, limite_max, iter=0):
+        #Fin de la ramificación
+        if len(frontera) == 0:
             return None
-        for i in range(100):
-            depth_search(i)
 
-def tarea1(n, ejemplo=False):
-    if not ejemplo:
-        solucion = solve_anchura()
-    else:
-        solucion = solve_laberinto_iter_dfs(n, ejemplo)
+        nodo_actual = frontera.pop(-1)
 
-    resultado = list()
-    if solucion is None or solucion.padre is None:
-        print(solucion, 'Sin solucion?')
-        return
-    resultado.append(solucion)
-    while(solucion.padre != None):
-        resultado.append(solucion.padre)
-        solucion = solucion.padre
+        # Si N es igual al tamaño de lab, hemos llegado a una solución
+        if nodo_actual.n == len(lab) - 1:
+            return nodo_actual
 
 
-    resultado.reverse()
-    return resultado
+        #Expandimos la frontera de manera iterativa, primero una rama y después la otra
+        #Esto ocurre mientras que no se supere el límite y existan nodos que visitar en un rama
+        if iter < limite_max:
+            if nodo_actual.color == 'Blanco':
+                expandir_frontera_p1(frontera,lab, nodo_actual, 1)
+                x = frontera_iter(frontera, limite_max, iter+1)
+                if x is not None: return x
+                expandir_frontera_p1(frontera,lab, nodo_actual, 2)
+                x = frontera_iter(frontera, limite_max, iter+1)
+                if x is not None: return x
 
+            if nodo_actual.color == 'Negro':
+                expandir_frontera_p1(frontera,lab, nodo_actual, 1)
+                x = frontera_iter(frontera, limite_max, iter+1)
+                if x is not None: return x
+                expandir_frontera_p1(frontera,lab, nodo_actual, 4)
+                x = frontera_iter(frontera, limite_max, iter+1)
+                if x is not None: return x
+
+
+    # Lógica iterativa
+    for max in range(limit):
+        frontera = [NodoP1(0, [0, lab[0]])]
+        x = frontera_iter(frontera, max)
+        if x is not None: return x
+    return None
