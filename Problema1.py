@@ -80,7 +80,6 @@ def solve_profundidad(lab=make_ejemplo(), limit=100):
 
     # Lógica iterativa
     for max in range(limit):
-        print(lab)
         frontera = [NodoP1(0, [0, lab[0]])]
         x = frontera_iter(frontera, max)
         if x is not None: return x
