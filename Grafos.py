@@ -8,8 +8,8 @@ class Nodo:
     def __repr__(self):
         return f'<{self.dato, self.i}>'
 
+#Suple las carencias de Nodo, pudiendo añadir hijos y con identificador único
 class NodoH(Nodo):
-
     def __init__(self, i, dato, padre=None, hijos=[]):
         super().__init__(i, dato, padre)
         self.hijos = hijos
@@ -38,10 +38,3 @@ class NodoP1(NodoH):
     def __repr__(self):
         return f'<{self.color}, {self.n}>'
 
-
-def rec(n : NodoH, limit = 3):
-    n.hijos = [NodoH(index, True, n) for index in range(2)]
-    for hijo in n.hijos:
-        if limit > 0:
-            print(limit)
-            rec(hijo, limit - 1)

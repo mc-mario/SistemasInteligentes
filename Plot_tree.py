@@ -5,9 +5,10 @@ from Problema1 import *
 
 def draw_tree(comment, n):
     dot = Digraph(comment=comment)
-    if n is None:
+    try:
+        tree_root = n.root()
+    except Exception as ex:
         return False
-    tree_root = n.root()
 
     resultado = list()
     resultado.append(n)
@@ -33,14 +34,13 @@ def draw_tree(comment, n):
         except Exception as e:
             pass
 
-    def show_way(dot, nodo : NodoH):
-        pass
+
 
     create_nodes(dot, tree_root, resultado)
     dot.render(f'test-output/{comment}.gv', view=True)
 
 n1 = solve_anchura()
-n2 = solve_profundidad(20)
+n2 = solve_profundidad(limit=20)
 
 
 draw_tree('Anchura', n1)

@@ -44,8 +44,6 @@ def solve_anchura(lab = make_ejemplo()):
             expandir_frontera_p1(frontera, lab, nodo_actual, 4)
     return None #No hay solución
 
-
-
 def solve_profundidad(lab=make_ejemplo(), limit=100):
     # La declaración de listas, llamadas iterativas y devolver la solución se encuentran debajo
     def frontera_iter(frontera, limite_max, iter=0):
@@ -82,6 +80,7 @@ def solve_profundidad(lab=make_ejemplo(), limit=100):
 
     # Lógica iterativa
     for max in range(limit):
+        print(lab)
         frontera = [NodoP1(0, [0, lab[0]])]
         x = frontera_iter(frontera, max)
         if x is not None: return x
