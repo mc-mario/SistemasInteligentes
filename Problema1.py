@@ -25,23 +25,28 @@ def solve_anchura(lab = make_ejemplo()):
 
     #Inicializamos la frontera con la casilla de salida
     frontera = [NodoP1(0, [0, lab[0]])]
-
+    visitados = list()
     while len(frontera) > 0:
         nodo_actual = frontera.pop(0)
         n = nodo_actual.n
         # N no corresponde a la profundidad (esto es i) si no a la casilla dentro del problema a resolver
-
+        if n not in visitados:
+            visitados.append(nodo_actual.n)
+        else:
+            continue
         # Si N es igual al tamaño de lab, hemos llegado a una solución
         if n == len(lab) - 1:
             return nodo_actual
 
         if nodo_actual.color == 'Blanco':
-            expandir_frontera_p1(frontera, lab, nodo_actual, 1)
             expandir_frontera_p1(frontera, lab, nodo_actual, 2)
+            expandir_frontera_p1(frontera, lab, nodo_actual, 1)
+
 
         else:
-            expandir_frontera_p1(frontera, lab, nodo_actual, 1)
             expandir_frontera_p1(frontera, lab, nodo_actual, 4)
+            expandir_frontera_p1(frontera, lab, nodo_actual, 1)
+
     return None #No hay solución
 
 def solve_profundidad(lab=make_ejemplo(), limit=100):
@@ -62,25 +67,63 @@ def solve_profundidad(lab=make_ejemplo(), limit=100):
         #Esto ocurre mientras que no se supere el límite y existan nodos que visitar en un rama
         if iter < limite_max:
             if nodo_actual.color == 'Blanco':
-                expandir_frontera_p1(frontera,lab, nodo_actual, 1)
+                expandir_frontera_p1(frontera,lab, nodo_actual, 2)
                 x = frontera_iter(frontera, limite_max, iter+1)
                 if x is not None: return x
-                nodo_actual.hijos = []
+                #nodo_actual.hijos = []
 
+                expandir_frontera_p1(frontera, lab, nodo_actual, 1)
+                x = frontera_iter(frontera, limite_max, iter + 1)
+                if x is not None: return x
+
+
+            if nodo_actual.color == 'Negro':
+                expandir_frontera_p1(frontera,lab, nodo_actual, 4)
+                x = frontera_iter(frontera, limite_max, iter+1)
+                if x is not None: return x
+                #nodo_actual.hijos = []
                 expandir_frontera_p1(frontera,lab, nodo_actual, 2)
                 x = frontera_iter(frontera, limite_max, iter+1)
                 if x is not None: return x
 
+
+    # Lógica iterativa
+    for max in range(limit):
+        frontera = [NodoP1(0, [0, lab[0]])]
+        x = frontera_iter(frontera, max)
+        if x is not None: return x
+    return None
+
+def solve_profundidad_no_iter(lab=make_ejemplo(), limit=100):
+    def frontera_iter(frontera, limite_max, iter=0):
+        # Fin de la ramificación
+        if len(frontera) == 0:
+            return None
+
+        nodo_actual = frontera.pop(-1)
+
+        # Si N es igual al tamaño de lab, hemos llegado a una solución
+        if nodo_actual.n == len(lab) - 1:
+            return nodo_actual
+
+        # Expandimos la frontera de manera iterativa, primero una rama y después la otra
+        # Esto ocurre mientras que no se supere el límite y existan nodos que visitar en un rama
+        if iter < limite_max:
+            if nodo_actual.color == 'Blanco':
+                expandir_frontera_p1(frontera, lab, nodo_actual, 1)
+                expandir_frontera_p1(frontera, lab, nodo_actual, 2)
+
+
+                x = frontera_iter(frontera, limite_max, iter + 1)
+                if x is not None: return x
+
             if nodo_actual.color == 'Negro':
-                expandir_frontera_p1(frontera,lab, nodo_actual, 1)
-                x = frontera_iter(frontera, limite_max, iter+1)
-                if x is not None: return x
-                nodo_actual.hijos = []
+                expandir_frontera_p1(frontera, lab, nodo_actual, 2)
+                expandir_frontera_p1(frontera, lab, nodo_actual, 4)
 
-                expandir_frontera_p1(frontera,lab, nodo_actual, 4)
-                x = frontera_iter(frontera, limite_max, iter+1)
-                if x is not None: return x
 
+                x = frontera_iter(frontera, limite_max, iter + 1)
+                if x is not None: return x
 
     # Lógica iterativa
     for max in range(limit):

@@ -21,9 +21,9 @@ def draw_tree(comment, n):
 
     def create_nodes(dot, nodo : NodoH, resultado):
         if nodo.uuid in [nodo.uuid for nodo in resultado]:
-            dot.node(f'{nodo.uuid}', f'{nodo.color}{nodo.n}', shape='star', style='filled')
+            dot.node(f'{nodo.uuid}', f'{nodo.color}{nodo.n+1}', shape='star', style='filled')
         else:
-            dot.node(f'{nodo.uuid}', f'{nodo.color}{nodo.n}', shape='egg')
+            dot.node(f'{nodo.uuid}', f'{nodo.color}{nodo.n+1}', shape='egg')
 
         for hijo in nodo.hijos:
             create_nodes(dot, hijo, resultado)
@@ -40,7 +40,7 @@ def draw_tree(comment, n):
     dot.render(f'test-output/{comment}.gv', view=True)
 
 n1 = solve_anchura()
-n2 = solve_profundidad(limit=20)
+n2 = solve_profundidad_no_iter(limit=20)
 
 
 draw_tree('Anchura', n1)
