@@ -13,7 +13,7 @@ class NodoBarco(NodoH):
         return f'<C: {3-self.canibales}  M:{3-self.misioneros} -{"Barco Izq" if self.barco == 0 else "Barco Der"}- C:{self.canibales}  M:{self.misioneros}>'
 
     def __str__(self):
-        return f'<C: {3-self.canibales}  M:{3-self.misioneros} -{"Barco Izq" if self.barco == 0 else "Barco Der"}- C:{self.canibales}  M:{self.misioneros}>'
+        return f'<C: {3-self.canibales}  M:{3-self.misioneros}  C:{self.canibales}  M:{self.misioneros}>'
 
 
 def exp_frontera(padre : NodoBarco):
@@ -47,7 +47,7 @@ def exp_frontera(padre : NodoBarco):
             frontera.append(NodoBarco(i + 1, (canibales_der, misioneros_der + 1, 1), padre=padre))
         if misioneros_der + 2 < 4:
             frontera.append(NodoBarco(i + 1, (canibales_der, misioneros_der + 2, 1), padre=padre))
-    
+
     for elem in frontera[:]:
         dato = elem.dato
         canibales_izq = 3 - dato[0]

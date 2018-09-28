@@ -31,7 +31,7 @@ def solve_anchura(lab = make_ejemplo()):
         n = nodo_actual.n
         # N no corresponde a la profundidad (esto es i) si no a la casilla dentro del problema a resolver
         if n not in visitados:
-            visitados.append(nodo_actual.n)
+            visitados.append(n)
         else:
             continue
         # Si N es igual al tamaño de lab, hemos llegado a una solución

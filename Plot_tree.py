@@ -22,9 +22,9 @@ def draw_tree(comment, n):
 
     def create_nodes(dot, nodo : NodoH, resultado):
         if nodo.uuid in [nodo.uuid for nodo in resultado]:
-            dot.node(f'{nodo.uuid}', f'{nodo.color}{nodo.n+1}', shape='star', style='filled')
+            dot.node(f'{nodo.uuid}', f'{nodo.n+1}: {nodo.color}', shape='doublecircle', style='filled', color='green3')
         else:
-            dot.node(f'{nodo.uuid}', f'{nodo.color}{nodo.n+1}', shape='egg')
+            dot.node(f'{nodo.uuid}', f'{nodo.n+1}: {nodo.color}', shape='box', style='filled', color='rosybrown2')
 
         for hijo in nodo.hijos:
             create_nodes(dot, hijo, resultado)
@@ -33,7 +33,7 @@ def draw_tree(comment, n):
             for hijo in nodo.hijos:
                 dot.edge(f'{nodo.uuid}', f'{hijo.uuid}')
         except Exception as e:
-            pass
+            print(e)
 
 
 
@@ -58,9 +58,9 @@ def draw_tree2(comment, n):
 
     def create_nodes(dot, nodo : NodoBarco, resultado):
         if nodo.uuid in [nodo.uuid for nodo in resultado]:
-            dot.node(f'{nodo.uuid}', f'{nodo}', shape='star', style='filled')
+            dot.node(f'{nodo.uuid}', f'{nodo}', shape='doublecircle', style='filled')
         else:
-            dot.node(f'{nodo.uuid}', f'{nodo}', shape='egg')
+            dot.node(f'{nodo.uuid}', f'{nodo}', shape='box')
 
         for hijo in nodo.hijos:
             create_nodes(dot, hijo, resultado)
@@ -77,8 +77,8 @@ def draw_tree2(comment, n):
     dot.render(f'test-output/{comment}.gv', view=True)
 
 
-n1 = solve_anchura()
-n2 = solve_profundidad_no_iter(limit=20)
+#n1 = solve_anchura()
+#n2 = solve_profundidad_no_iter(limit=20)
 n3 = solve_profundidad_barco()
 
 #draw_tree('Anchura', n1)
