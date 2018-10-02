@@ -110,16 +110,18 @@ def solve_profundidad_no_iter(lab=make_ejemplo(), limit=100):
         # Esto ocurre mientras que no se supere el límite y existan nodos que visitar en un rama
         if iter < limite_max:
             if nodo_actual.color == 'Blanco':
-                expandir_frontera_p1(frontera, lab, nodo_actual, 1)
                 expandir_frontera_p1(frontera, lab, nodo_actual, 2)
+                expandir_frontera_p1(frontera, lab, nodo_actual, 1)
+
 
 
                 x = frontera_iter(frontera, limite_max, iter + 1)
                 if x is not None: return x
 
             if nodo_actual.color == 'Negro':
-                expandir_frontera_p1(frontera, lab, nodo_actual, 2)
                 expandir_frontera_p1(frontera, lab, nodo_actual, 4)
+                expandir_frontera_p1(frontera, lab, nodo_actual, 2)
+
 
 
                 x = frontera_iter(frontera, limite_max, iter + 1)
@@ -130,4 +132,37 @@ def solve_profundidad_no_iter(lab=make_ejemplo(), limit=100):
         frontera = [NodoP1(0, [0, lab[0]])]
         x = frontera_iter(frontera, max)
         if x is not None: return x
+    return None
+
+def solve_bfs(lab=make_ejemplo()):
+    def h(x):
+        return 16 - x
+    def h2(x : NodoP1):
+        if x.color == 'Negro':
+            print(x.n, x.color, 16 - x.n - 4)
+            return 16 - x.n - 4
+        if x.color == 'Blanco':
+            print(x.n, x.color, 16 - x.n - 2 )
+            return 16 - x.n - 2
+
+    frontera = [NodoP1(0, [0, lab[0]])]
+    while len(frontera) > 0:
+        nodo_actual = frontera.pop(0)
+
+        if nodo_actual.n == len(lab) -1:
+            return nodo_actual
+
+        if nodo_actual.color == 'Blanco':
+            expandir_frontera_p1(frontera, lab, nodo_actual, 2)
+            expandir_frontera_p1(frontera, lab, nodo_actual, 1)
+
+
+        else:
+            expandir_frontera_p1(frontera, lab, nodo_actual, 4)
+            expandir_frontera_p1(frontera, lab, nodo_actual, 1)
+
+        print(frontera)
+        frontera.sort(key=lambda x : h2(x))
+        print(frontera)
+
     return None

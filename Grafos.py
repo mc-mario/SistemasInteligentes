@@ -12,10 +12,11 @@ class Nodo:
 
 #Suple las carencias de Nodo, pudiendo añadir hijos y con identificador único
 class NodoH(Nodo):
-    def __init__(self, i, dato, padre=None, hijos=[]):
+    def __init__(self, i, dato, padre=None, hijos=[], coste=0):
         super().__init__(i, dato, padre)
         self.hijos = hijos
         self.uuid = uuid4()
+        self.coste = coste
 
     def set_hijos(self, hijos):
         if len(self.hijos) > 0:

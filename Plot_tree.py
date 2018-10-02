@@ -79,8 +79,9 @@ def draw_tree2(comment, n):
 
 #n1 = solve_anchura()
 #n2 = solve_profundidad_no_iter(limit=20)
-n3 = solve_profundidad_barco()
-
+#n3 = solve_profundidad_barco()
+n4 = solve_bfs()
 #draw_tree('Anchura', n1)
 #draw_tree('Profundidad', n2)
-draw_tree2('Barco', n3)
+#draw_tree2('Barco', n3)
+draw_tree('BFS', n4)
