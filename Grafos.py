@@ -31,9 +31,29 @@ class NodoH(Nodo):
             aux = aux.padre
         return aux
 
+class NodoND():
+    def __init__(self, i, padre=None, hijos=[]):
+        self.uuid = uuid4()
+        self.i = i
+        self.padre = padre
+        self.hijos = hijos
+
+    def set_hijos(self, hijos):
+        if len(self.hijos) > 0:
+            self.hijos.extend(hijos)
+        else: self.hijos = hijos
+        for hijo in hijos:
+            hijo.padre = self
+
+    def root(self):
+        aux = self.padre
+        while (aux.padre != None):
+            aux = aux.padre
+        return aux
+
 class NodoP1(NodoH):
-    def __init__(self, i, dato, padre=None, hijos=[]):
-        super().__init__(i, dato, padre, hijos)
+    def __init__(self, i, dato, padre=None, hijos=[], coste=0):
+        super().__init__(i, dato, padre, hijos, coste)
         self.n = self.dato[0]
         if self.dato[1] : self.color = 'Blanco' #True representa el color Blanco y vcv
         else: self.color = 'Negro'
