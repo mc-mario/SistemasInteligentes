@@ -38,9 +38,6 @@ class Predicado():
         return f'{" ^ ".join(str(clausula) for clausula in self.clausulas)}'
 
 
-
-num_terminos = 5
-
 class Estado(NodoND):
     def __init__(self,num_terminos,tabla = None, i=0, padre=None, hijos=[], mov_previo=None):
         super().__init__(i, padre, hijos)
@@ -63,9 +60,6 @@ class Estado(NodoND):
         return f"{list(map(lambda x : 'T' if x else 'F' if x is False else 'N' if x is None else '', self.tabla))}"
 
 
-
-
-
 def explore():
     win = [{'1': '', '2': '¬'}, {'1': '¬', '3': '¬'}, {'4': '', '5': '¬'}, {'2': '', '5': ''}, {'3': '', '4': ''}]
     ej1 = Predicado(win)
@@ -81,8 +75,6 @@ def explore():
         #frontera = sorted(frontera, key=lambda x: ej1.check(x.tabla)[1] + x.i, reverse=True)
 
     return None
-
-
 
 aux = explore()
 draw_tree('Boloñesa', aux)
