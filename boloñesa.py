@@ -61,8 +61,11 @@ class Estado(NodoND):
 
 
 def explore():
-    win = [{'1': '', '2': '¬'}, {'1': '¬', '3': '¬'}, {'4': '', '5': '¬'}, {'2': '', '5': ''}, {'3': '', '4': ''}]
+    #win = [{'1': '', '2': '¬'}, {'1': '¬', '3': '¬'}, {'4': '', '5': '¬'}, {'2': '', '5': ''}, {'3': '', '4': ''}]
+    win = [{'1':'', '2':'', '3': '¬'}, {'1':'', '4':'¬', '5':''}]
+    '''NO DETERMINISMO : EL PUNTO INICIAL NO ES SIEMPRE NULL NULL NULL... SI NO V F V F // F F V F // F V F V'''
     ej1 = Predicado(win)
+    print(ej1)
     es = Estado(5)
     frontera = [es]
     while len(frontera) > 0:
@@ -72,7 +75,7 @@ def explore():
         actual.aplicar_mov()
         for hijo in actual.hijos:
             frontera.append(hijo)
-        #frontera = sorted(frontera, key=lambda x: ej1.check(x.tabla)[1] + x.i, reverse=True)
+        frontera = sorted(frontera, key=lambda x: ej1.check(x.tabla)[1] + x.i, reverse=True)
 
     return None
 

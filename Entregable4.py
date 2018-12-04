@@ -9,6 +9,8 @@ class Estado():
         self.rew = rew
         self.utilidad = 0
         self.final = final
+        if final:
+            self.utilidad = rew
 
     def __repr__(self):
         return f"{self.nombre}"
@@ -65,36 +67,36 @@ class Nodo():
 # n4 = Nodo(s4, [])
 # nodos = [n1,n2,n3,n4]
 
-'''Ejercicio Entregable'''
+# '''Ejercicio Entregable'''
 # #Estados y Acciones
-estados = list()
-s0 = Estado('S0', -1)
-s1 = Estado('S1', -1)
-s2 = Estado('S2', -1)
-s3 = Estado('S3', -1)
-s4 = Estado('S4', -10, final=True)
-s5 = Estado('S5', 10, final=True)
-s6 = Estado('S6', -10, final=True)
-a0 = Accion('a', {s0:0.5, s1:0.5 })
-a1 = Accion('a', {s4:0.9, s5:0.1})
-a2 = Accion('a', {s3:1})
-a3 = Accion('a', {s0:0.5, s2:0.5})
-b0 = Accion('b', {s1:0.9, s2:0.1})
-b2 = Accion('b', {s1:1.0})
-b3 = Accion('b', {s6:0.9, s5:0.1})
-c0 = Accion('c', {s3:1})
-c1 = Accion('c', {s5:0.9,s2:0.1})
+# estados = list()
+# s0 = Estado('S0', -1)
+# s1 = Estado('S1', -1)
+# s2 = Estado('S2', -1)
+# s3 = Estado('S3', -1)
+# s4 = Estado('S4', -10, final=True)
+# s5 = Estado('S5', 10, final=True)
+# s6 = Estado('S6', -10, final=True)
+# a0 = Accion('a', {s0:0.5, s1:0.5 })
+# a1 = Accion('a', {s4:0.9, s5:0.1})
+# a2 = Accion('a', {s3:1})
+# a3 = Accion('a', {s0:0.5, s2:0.5})
+# b0 = Accion('b', {s1:0.9, s2:0.1})
+# b2 = Accion('b', {s1:1.0})
+# b3 = Accion('b', {s6:0.9, s5:0.1})
+# c0 = Accion('c', {s3:1})
+# c1 = Accion('c', {s5:0.9,s2:0.1})
 
-# Nodos -> Estado y Accion
-n0 = Nodo(s0, [a0, b0, c0], a0)
-n1 = Nodo(s1, [a1, c1], a1)
-n2 = Nodo(s2, [a2, b2], a2)
-n3 = Nodo(s3, [a3, b3], a3)
-n4 = Nodo(s4)
-n5 = Nodo(s5)
-n6 = Nodo(s6)
+# # Nodos -> Estado y Accion
+# n0 = Nodo(s0, [a0, b0, c0], a0)
+# n1 = Nodo(s1, [a1, c1], a1)
+# n2 = Nodo(s2, [a2, b2], a2)
+# n3 = Nodo(s3, [a3, b3], a3)
+# n4 = Nodo(s4)
+# n5 = Nodo(s5)
+# n6 = Nodo(s6)
 
-nodos = [n0, n1, n2, n3, n4, n5, n6]
+# nodos = [n0, n1, n2, n3, n4, n5, n6]
 
 '''Ejercicio Clase 2 Noviembre'''
 # s0 = Estado('s1',-1)
@@ -115,6 +117,22 @@ nodos = [n0, n1, n2, n3, n4, n5, n6]
 # n3 = Nodo(s3)
 
 # nodos = [n0,n1,n2,n3]
+
+s0 = Estado('s0',0)
+s1 = Estado('s1', 0)
+s2 = Estado('s2', 0)
+s3 = Estado('s3',1, final=True)
+a0 = Accion('a', {s1:0.9, s0:0.1})
+b0 = Accion('b', {s2:1})
+a1 = Accion('a', {s0:0.9, s2:0.1})
+b1 = Accion('b', {s3:1})
+a2 = Accion('a', {s2:0.5, s3:0.5})
+n0 = Nodo(s0, [a0, b0])
+n1 = Nodo(s1, [a1, b1])
+n2 = Nodo(s2, [a2])
+n3 = Nodo(s3)
+nodos = [n0,n1,n2,n3]
+
 
 gamma = 0.999
 
@@ -174,7 +192,9 @@ def policy_iteration():
         politica_prime = policy_improvement(nodos)
         print('π ', policy)
         print("π'",politica_prime)
-        if policy == politica_prime: return politica_prime
+        if policy == politica_prime:             
+            return politica_prime
+
 
 
 
@@ -193,6 +213,7 @@ def q_learning(epochs = 3):
             accion, q = max(q_table[state].items(), key=lambda x: x[1])
 
             ran = random.random()
+            
             for key, value in accion.dic_direcc.items():
                 if ran <= value:
                     new_state = key
@@ -207,7 +228,7 @@ def q_learning(epochs = 3):
                 print('\n')
                 break
             else:
-                dunder, q_prime = max(q_table[new_state].items(), key=lambda x: x[1])
+                _ , q_prime = max(q_table[new_state].items(), key=lambda x: x[1])
                 q = (1-learning_ratio) * q + learning_ratio * (new_state.rew + q_prime)
 
 
@@ -219,8 +240,8 @@ def q_learning(epochs = 3):
 
 
 
-# q_learning(100)
-# #iteracion_valores(0.99, nodos)
+#çq_learning(4)
+iteracion_valores(0.99, nodos)
 # # print('Politica', [nodo.politica for nodo in nodos])
 # #policy_iteration()
 # #print([nodo.politica for nodo in nodos])

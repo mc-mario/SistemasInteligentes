@@ -66,7 +66,8 @@ def exp_frontera(padre : NodoBarco):
 
 
 def solve_profundidad_barco():
-    frontera = [NodoBarco(0, (3,3,1))]
+    n = NodoBarco(0, (3,3,1))
+    frontera = [n]
     visitados = list()
     while len(frontera) > 0:
         nodo_actual = frontera.pop(0)
@@ -84,6 +85,8 @@ def solve_profundidad_barco():
         hijos = exp_frontera(nodo_actual)
         nodo_actual.set_hijos(hijos)
         frontera.extend(hijos)
-    return None
+    return n
+
+
 
 
